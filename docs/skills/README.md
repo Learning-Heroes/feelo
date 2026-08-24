@@ -1,3 +1,3 @@
-# Skills y prompts reutilizables (documentación)
+# Reusable skills and prompts (documentation)
 
-Esta carpeta guarda prompts y notas reutilizables ligados a documentación/producto (por ejemplo, cómo redactar un ADR, cómo resumir una decisión). Las skills que Claude Code ejecuta viven en [`../../.claude/skills/`](../../.claude/skills/); el índice de cuándo usar cada una está en [`../../.agents/skills.md`](../../.agents/skills.md).
+This folder holds reusable prompts and notes tied to documentation/product work (e.g. how to draft an ADR, how to summarize a decision). The skills Claude Code executes live in [`../../.agents/skills/`](../../.agents/skills/) (available in Claude Code via the [`../../.claude/skills/`](../../.claude/skills/) symlink); the index of when to use each one is in the Skills section of [`../../AGENTS.md`](../../AGENTS.md).

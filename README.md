@@ -1,18 +1,24 @@
 # Feelo
 
-> Documentación funcional en español. Código (nombres, commits, comentarios) en inglés — ver [AGENTS.md](./AGENTS.md).
+> Este README es la única documentación del repo en español (es la puerta de entrada del curso). El resto de la documentación funcional (`docs/`) y las instrucciones para agentes (`AGENTS.md`, `.agents/`, `.claude/`) están en inglés. Código (nombres, commits, comentarios) siempre en inglés — ver [AGENTS.md](./AGENTS.md).
+
+Feelo es el proyecto que se construye a lo largo del curso "IA para Developers" como caso práctico de un equipo trabajando con agentes de IA de forma consistente.
 
 ## Visión
 
-_Pendiente de definir._ Feelo es el proyecto que se construye a lo largo del curso "IA para Developers" como caso práctico de un equipo trabajando con agentes de IA de forma consistente.
+Feelo es un recomendador de qué ver, basado en estado de ánimo y con mecánica de swipe — como un Tinder para decidir qué peli o serie ver esta noche. Dices cómo te sientes (te apetece reírte, llorar, algo ligero, pensar, tensión, nostalgia...) y Feelo te enseña una baraja de títulos filtrados por ese ánimo y por las plataformas de streaming a las que estás suscrito. Deslizas a la derecha lo que te interesa y aparece un "¡Match!" con acceso directo a verlo en su plataforma.
 
 ## Problema
 
-_Pendiente de definir._ Completar con el problema real que resuelve la app antes de avanzar en funcionalidad.
+Con dos o más suscripciones de streaming activas, decidir qué ver se convierte en 15-20 minutos de scroll sin rumbo por catálogos enormes, con recomendaciones que se basan en tu historial y no en cómo te sientes ahora mismo, repartidas además entre varias apps que solo recomiendan de su propio catálogo.
 
 ## Alcance
 
-_Pendiente de definir._ Qué entra en la v1 y qué se pospone explícitamente.
+**Entra en el MVP:** onboarding (elegir plataformas + swipes iniciales de gustos), check-in de ánimo, baraja de swipe filtrada por ánimo + plataformas, pantalla de "match", watchlist, perfil de gustos básico por ánimo.
+
+**Se posterga explícitamente:** funciones sociales (matchear con amigos, sesiones compartidas), modo "ver juntos", sincronización en vivo del catálogo vía APIs oficiales de las plataformas (v1 usa un catálogo semilla/manual), reseñas de usuarios, recomendaciones basadas en el historial real de visionado (sin OAuth a las cuentas de streaming), múltiples perfiles por cuenta.
+
+Detalle completo en [docs/product.md](./docs/product.md).
 
 ## Stack
 
@@ -51,10 +57,10 @@ Punto de entrada para humanos y agentes: [docs/index.md](./docs/index.md).
 
 ## Decisiones abiertas
 
-- Definir visión/problema/alcance del producto.
-- Definir modelo de datos inicial en Supabase ([docs/database.md](./docs/database.md)).
+- Cerrar el esquema de datos inicial en Supabase ([docs/database.md](./docs/database.md)) — hay un borrador de tablas, falta implementarlo.
 - Definir estrategia de navegación y gestión de estado en Expo.
+- Definir de dónde sale el catálogo semilla de títulos (manual al inicio; evaluar una fuente real más adelante).
 
 ## Estado del proyecto
 
-🚧 Estructura base / scaffold inicial (README, `CLAUDE.md`, `AGENTS.md`, `.agents/`, `.claude/`, `docs/`, `.github/`). Sin código de aplicación todavía.
+🚧 Estructura base / scaffold inicial (README, `AGENTS.md`, `.agents/`, `.claude/`, `docs/`, `.github/`). Visión de producto definida en [docs/product.md](./docs/product.md); sin código de aplicación todavía.

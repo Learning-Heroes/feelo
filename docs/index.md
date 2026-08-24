@@ -1,14 +1,14 @@
-# Índice de documentación
+# Documentation index
 
-Mapa de lectura recomendado para humanos y agentes. No hace falta leer todo esto en cada tarea — solo lo relevante.
+Recommended reading map for humans and agents. No need to read all of it for every task — just what's relevant.
 
-| Archivo | Contenido | Cuándo leerlo |
+| File | Content | When to read it |
 |---|---|---|
-| [`product.md`](product.md) | Descripción funcional de la app | Antes de trabajar en cualquier feature de producto |
-| [`architecture.md`](architecture.md) | Arquitectura Expo + Supabase | Antes de tocar la estructura de la app o la integración con Supabase |
-| [`database.md`](database.md) | Modelo de datos, tablas, relaciones, RLS | Antes de tocar el esquema o escribir queries/políticas nuevas |
-| [`api-contracts.md`](api-contracts.md) | Contratos entre app, Supabase y servicios externos | Antes de tocar una integración o Edge Function |
-| [`decisions/`](decisions/) | ADRs — decisiones no deducibles del código | Cuando haga falta entender el "por qué" de algo ya decidido |
-| [`skills/`](skills/) | Skills y prompts reutilizables (Expo, Supabase, docs, testing) | Al reutilizar un enfoque ya resuelto antes |
+| [`product.md`](product.md) | Functional description of the app | Before working on any product feature |
+| [`architecture.md`](architecture.md) | Expo + Supabase architecture | Before touching the app's structure or the Supabase integration |
+| [`database.md`](database.md) | Data model, tables, relationships, RLS | Before touching the schema or writing new queries/policies |
+| [`api-contracts.md`](api-contracts.md) | Contracts between the app, Supabase and external services | Before touching an integration or Edge Function |
+| [`decisions/`](decisions/) | ADRs — decisions that can't be deduced from the code | When you need to understand the "why" of something already decided |
+| [`skills/`](skills/) | Reusable docs/product prompts and notes | When reusing an approach already solved before |
 
-Reglas generales para agentes: [`../AGENTS.md`](../AGENTS.md). Instrucciones específicas de Claude: [`../CLAUDE.md`](../CLAUDE.md).
+General agent rules: [`../AGENTS.md`](../AGENTS.md). Claude-specific instructions: [`../.claude/CLAUDE.md`](../.claude/CLAUDE.md).

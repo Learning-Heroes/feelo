@@ -1,6 +1,6 @@
-# 0001 · Registrar decisiones de arquitectura como ADRs
+# 0001 · Record architecture decisions as ADRs
 
-- **Estado**: aceptada
-- **Contexto**: necesitamos un sitio para las decisiones que no se pueden deducir leyendo el código (por qué X en vez de Y), para que un agente o una persona nueva no las repita ni las contradiga sin saberlo.
-- **Decisión**: cada decisión de arquitectura, modelo de datos o elección de librería no trivial se documenta como un ADR en `docs/decisions/`, con formato `NNNN-titulo-corto.md`.
-- **Consecuencias**: más disciplina al tomar decisiones; a cambio, el "por qué" del proyecto queda escrito y versionado junto al código, no en la memoria del equipo.
+- **Status**: accepted
+- **Context**: we need a place for decisions that can't be deduced by reading the code (why X instead of Y), so an agent or a new person doesn't unknowingly repeat or contradict them.
+- **Decision**: every non-trivial architecture, data-model or library decision is documented as an ADR in `docs/decisions/`, formatted as `NNNN-short-title.md`.
+- **Consequences**: more discipline when making decisions; in exchange, the project's "why" is written down and versioned alongside the code, not left in the team's memory.

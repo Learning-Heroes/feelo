@@ -1,35 +1,38 @@
-# Arquitectura
+# Architecture
 
-> `TODO`: completar según decisiones reales una vez arranque el código. Este documento describe cómo, no qué (eso va en `product.md`).
+> This document describes how, not what (that's `product.md`). Details below are the current best guess for a v1 that has no real code yet — treat anything not marked as decided as a hypothesis to revisit once implementation starts.
 
-## Visión general
+## Overview
 
 ```
-Expo (React Native, cliente)
+Expo (React Native, client)
         │
         ▼
 Supabase
-  ├─ Postgres (datos)
-  ├─ Auth (autenticación de usuarios)
-  ├─ Row Level Security (autorización a nivel de fila)
-  └─ Edge Functions (lógica de servidor, si aplica)
+  ├─ Postgres (data: platforms, moods, titles, swipes, watchlist)
+  ├─ Auth (user authentication)
+  ├─ Row Level Security (row-level authorization)
+  └─ Edge Functions (server logic, e.g. assembling the swipe deck)
 ```
 
 ## App (Expo)
 
-- `TODO`: navegación (Expo Router vs React Navigation).
-- `TODO`: gestión de estado (Context, Zustand, TanStack Query, etc.).
-- `TODO`: estructura de carpetas.
+- `TODO`: navigation (Expo Router vs React Navigation).
+- `TODO`: state management (Context, Zustand, TanStack Query, etc.).
+- `TODO`: folder structure.
+- Expected screen flow: onboarding (platform picker + taste seed) → mood check-in → swipe deck → match screen → watchlist. See [`product.md`](product.md).
 
 ## Backend (Supabase)
 
-- `TODO`: qué vive en Postgres/RLS vs qué vive en Edge Functions.
-- `TODO`: estrategia de autenticación (email/password, OAuth, magic link).
+- Catalog data (`platforms`, `moods`, `titles`, `title_platforms`, `title_moods`) is public-read, seed/admin-write — see [`database.md`](database.md).
+- User data (`user_platforms`, `swipes`, derived watchlist) is RLS-protected per user.
+- `TODO`: whether deck assembly (mood + platforms + exclude-already-swiped) stays a plain client-side query or moves into an Edge Function once the filtering logic grows (e.g. to add taste-profile weighting).
+- `TODO`: auth strategy (email/password, OAuth, magic link).
 
-## Integraciones externas
+## External integrations
 
-`TODO`: servicios de terceros, si los hay.
+None in v1 — the title catalog is seeded manually rather than pulled from a live streaming-platform API (see `docs/product.md` → Out of scope). Revisit once a real catalog source (e.g. a licensed metadata API) is needed.
 
-## Decisiones relacionadas
+## Related decisions
 
-Ver [`decisions/`](decisions/) para el porqué de las decisiones de arquitectura ya tomadas.
+See [`decisions/`](decisions/) for the why behind architecture decisions already made.
