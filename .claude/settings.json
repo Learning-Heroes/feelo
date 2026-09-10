@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run lint)",
+      "Bash(npm run test)",
+      "Bash(npm run start)",
+      "Bash(git status)",
+      "Bash(git diff)",
+      "Bash(git log)",
+      "Bash(supabase start)",
+      "Bash(supabase status)"
+    ],
+    "deny": [
+      "Bash(supabase db reset:*)",
+      "Read(./.env)",
+      "Read(./.env.*)"
+    ]
+  }
+}

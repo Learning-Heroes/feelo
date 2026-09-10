@@ -1,0 +1,1 @@
+@../../.agents/guidelines/documentation.md
