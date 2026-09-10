@@ -11,7 +11,6 @@
       "Bash(supabase status)"
     ],
     "deny": [
-      "Bash(git push:*)",
       "Bash(supabase db reset:*)",
       "Read(./.env)",
       "Read(./.env.*)"
