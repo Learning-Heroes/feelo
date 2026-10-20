@@ -13,7 +13,7 @@ Rules for any AI agent (Claude Code, Codex, Cursor, Copilot…) working in this 
 
 Genre is never asked: it emerges from the algorithm as a latent variable. The recommender is **in-house and deterministic** — no LLM APIs or external inference.
 
-Status: **pre-scaffold**. No app code yet; the commands below start working once the Expo app is scaffolded.
+Status: **early build**. Expo app scaffolded (SDK 58, Expo Router, Unistyles 3 — needs a dev build: `npm run ios`, not Expo Go). `api:sync` and Supabase arrive with the first backend task.
 
 ## Stack
 

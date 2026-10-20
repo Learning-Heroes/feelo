@@ -32,3 +32,11 @@ yarn-error.log*
 
 # Claude Code (personal settings)
 .claude/settings.local.json
+
+# Expo / native (Continuous Native Generation)
+expo-env.d.ts
+.metro-health-check*
+*.tsbuildinfo
+/ios
+/android
+.kotlin/
