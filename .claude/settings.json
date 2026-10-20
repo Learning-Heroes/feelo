@@ -1,19 +1,94 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "allow": [
-      "Bash(npm run lint)",
-      "Bash(npm run test)",
+      "Bash(npm install)",
+      "Bash(npm run lint:*)",
+      "Bash(npm run typecheck)",
+      "Bash(npm run test:*)",
       "Bash(npm run start)",
-      "Bash(git status)",
-      "Bash(git diff)",
-      "Bash(git log)",
+      "Bash(npm run api:sync)",
+      "Bash(npx eslint:*)",
+      "Bash(npx tsc --noEmit:*)",
+      "Bash(npx jest:*)",
+      "Bash(npx expo start:*)",
+      "Bash(npx expo install:*)",
+      "Bash(npx supabase start)",
+      "Bash(npx supabase stop)",
+      "Bash(npx supabase status)",
+      "Bash(npx supabase db reset)",
+      "Bash(npx supabase db reset --local)",
+      "Bash(npx supabase migration new:*)",
+      "Bash(npx supabase migration list --local)",
+      "Bash(npx supabase gen types typescript --local:*)",
+      "Bash(npx supabase functions new:*)",
+      "Bash(npx supabase functions serve:*)",
+      "Bash(npx supabase test db)",
       "Bash(supabase start)",
-      "Bash(supabase status)"
+      "Bash(supabase stop)",
+      "Bash(supabase status)",
+      "Bash(supabase db reset)",
+      "Bash(supabase db reset --local)",
+      "Bash(supabase migration new:*)",
+      "Bash(supabase gen types typescript --local:*)",
+      "Bash(supabase functions serve:*)",
+      "Bash(deno test:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git branch:*)",
+      "Bash(git switch:*)",
+      "Bash(git checkout -b:*)",
+      "mcp__notion",
+      "mcp__supabase-local"
     ],
     "deny": [
-      "Bash(supabase db reset:*)",
       "Read(./.env)",
-      "Read(./.env.*)"
+      "Read(./.env.*)",
+      "Read(./**/.env)",
+      "Read(./**/.env.*)",
+      "Edit(./api/**)",
+      "Write(./api/**)",
+      "Edit(./postman/**)",
+      "Write(./postman/**)",
+      "Bash(*--linked*)",
+      "Bash(*--project-ref*)",
+      "Bash(*--db-url*)",
+      "Bash(npx supabase link:*)",
+      "Bash(npx supabase db push:*)",
+      "Bash(npx supabase functions deploy:*)",
+      "Bash(npx supabase secrets:*)",
+      "Bash(supabase link:*)",
+      "Bash(supabase db push:*)",
+      "Bash(supabase functions deploy:*)",
+      "Bash(supabase secrets:*)",
+      "Bash(*eas submit*)",
+      "Bash(*eas update*)",
+      "Bash(*eas build*production*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git push origin main:*)",
+      "Bash(git push origin staging:*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|MultiEdit|Write|NotebookEdit",
+        "hooks": [
+          { "type": "command", "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/protect-generated.sh" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|MultiEdit|Write",
+        "hooks": [
+          { "type": "command", "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/check-after-edit.sh", "timeout": 120 }
+        ]
+      }
     ]
   }
 }

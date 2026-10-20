@@ -1,26 +1,32 @@
 ---
 name: expo
-description: Feelo-specific Expo/React Native conventions — the app's screen flow, swipe-deck state, and how it talks to Supabase. For general Expo/React Native work (routing, data fetching, project structure, UI), use the official expo-* skills (expo-router, expo-data-fetching, expo-project-structure, expo-native-ui, etc.) instead — this skill only covers what's specific to Feelo.
+description: Feelo-specific app knowledge — the screen flow (onboarding, Discover swiper, Suggest), where each screen gets its data and what it writes. Use when building or changing a Feelo screen or feature hook. For generic Expo work (routing, data fetching, native UI, EAS) use the official expo-* skills instead.
 ---
 
-# Expo / React Native — Feelo
+# Expo — Feelo
 
-For generic Expo work, prefer the official skills already installed (`expo-router` for navigation, `expo-data-fetching` for networking, `expo-project-structure` for folder layout, `expo-native-ui` / `expo-tailwind-setup` for UI). This skill only covers what those don't know about: Feelo's own screens and data flow.
+Generic Expo knowledge: official `expo-router`, `expo-data-fetching`, `expo-native-ui`, `expo-animation` skills. Conventions: [`app/AGENTS.md`](../../../app/AGENTS.md). Flows and screens: [UX Flows](https://app.notion.com/p/3c6bd3bd193b809284b7ddce7d4158ed) — if a screen detail isn't defined there or in the task, ask Toni (UI) or Iskren (product).
 
-## Screen flow
+Ignore any `expo-*` advice about Tailwind/NativeWind: Feelo uses Unistyles.
 
-Core screens (see [`docs/product.md`](../../../docs/product.md)): onboarding (platform picker + taste-seed swipes) → mood check-in → swipe deck → match screen (on a right/super swipe) → watchlist.
+## Flows
 
-## Swipe deck state
+| Flow | Feature folder | Reads | Writes |
+|---|---|---|---|
+| Onboarding (platforms, country/language) | `src/features/onboarding` | `platform` | `user_platform`, user profile |
+| **Discover** — clip feed + 4-direction swipe | `src/features/discover` | `content` + `clip`, filtered server-side | `user_content` (`reaction`, `clip_id`, `clip_progress`) |
+| **Suggest** — mood grid → intent → format → time | `src/features/suggest` | suggestion result (Edge Function) | `user_mood`, then `suggestion_item.was_chosen` / `feedback_reaction` |
 
-The swipe deck is the most stateful screen: current mood, current platform filter, remaining card queue, and the in-flight swipe gesture. Keep gesture state local to the deck component; keep swipe *results* (what gets written to Supabase) in a data layer, not component state.
+Swipe mapping: ↑ `loved` · → `liked` · ← `disliked` · ↓ `not_seen`. Mood grid: X = valence, Y = arousal, both in [-1, 1]. Intent: `repair` / `congruent` / `explore`. Time slider: minutes, `null` = no limit (3h+).
 
-## Calling Supabase from the app
+## Data rules for screens
 
-- Always use the Supabase client (`@supabase/supabase-js`) with the `EXPO_PUBLIC_*` keys from `.env`, never the `service_role key` on the client.
-- Rely on RLS for authorization; don't hand-filter in the client what a policy should already filter (e.g. never fetch another user's swipes/watchlist and filter client-side).
-- Type responses (generate types from the Supabase schema once it exists: `supabase gen types typescript`).
+- Each flow exposes hooks from its feature (`useDiscoverFeed`, `useSwipe`, `useSuggestion`…) built on TanStack Query; screens only call those.
+- Scoring, filtering and taste updates (`user_genre_affinity`) happen server-side. The app never computes a score or filters the catalog it received.
+- Swipes are optimistic: update the feed immediately, write in the background, retry safely (the write must be idempotent — `user_content` is unique on `user_id, content_id`).
+- Gesture state stays local to the swiper (Reanimated shared values); the swipe *result* goes through the hook.
+- Clips are YouTube embeds keyed by `clip.youtube_key`. Never download or host video.
 
 ## Testing priority
 
-Prioritize tests for business logic and hooks specific to Feelo (deck-filtering by mood and platform, swipe-direction handling, "already swiped" exclusion) over UI snapshots.
+Feature hooks and logic first (swipe direction → reaction, optimistic update and rollback, Suggest step validation with Zod), then visible behaviour with RNTL. Critical flows (onboarding, swiper, suggestion) get a Maestro E2E once the app runs.

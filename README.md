@@ -1,66 +1,41 @@
 # Feelo
 
-> Este README es la única documentación del repo en español (es la puerta de entrada del curso). El resto de la documentación funcional (`docs/`) y las instrucciones para agentes (`AGENTS.md`, `.agents/`, `.claude/`) están en inglés. Código (nombres, commits, comentarios) siempre en inglés — ver [AGENTS.md](./AGENTS.md).
+> Este README es la única documentación del repo en español (es la puerta de entrada del curso). Las instrucciones para agentes (`AGENTS.md`, `.agents/`, `.claude/`) y el código (nombres, commits, comentarios) están en inglés — ver [AGENTS.md](./AGENTS.md).
 
 Feelo es el proyecto que se construye a lo largo del curso "IA para Developers" como caso práctico de un equipo trabajando con agentes de IA de forma consistente.
 
 ## Visión
 
-Feelo es un recomendador de qué ver, basado en estado de ánimo y con mecánica de swipe — como un Tinder para decidir qué peli o serie ver esta noche. Dices cómo te sientes (te apetece reírte, llorar, algo ligero, pensar, tensión, nostalgia...) y Feelo te enseña una baraja de títulos filtrados por ese ánimo y por las plataformas de streaming a las que estás suscrito. Deslizas a la derecha lo que te interesa y aparece un "¡Match!" con acceso directo a verlo en su plataforma.
+Feelo es una app móvil (iOS + Android) que recomienda películas y series según tu **mood**. En vez de preguntarte qué quieres ver, te pregunta **cómo estás** y **qué quieres que el contenido haga por ti**.
 
-## Problema
+- **Descubre:** feed de clips con swipe en 4 direcciones (me encantó / me gustó / no me gustó / no lo he visto) que construye tu perfil de gustos.
+- **Sugerir:** en 3 toques — mood en un grid ánimo × energía, intención (súbeme el ánimo / acompáñame / sorpréndeme) y formato — una sugerencia directa y alternativas.
 
-Con dos o más suscripciones de streaming activas, decidir qué ver se convierte en 15-20 minutos de scroll sin rumbo por catálogos enormes, con recomendaciones que se basan en tu historial y no en cómo te sientes ahora mismo, repartidas además entre varias apps que solo recomiendan de su propio catálogo.
-
-## Alcance
-
-**Entra en el MVP:** onboarding (elegir plataformas + swipes iniciales de gustos), check-in de ánimo, baraja de swipe filtrada por ánimo + plataformas, pantalla de "match", watchlist, perfil de gustos básico por ánimo.
-
-**Se posterga explícitamente:** funciones sociales (matchear con amigos, sesiones compartidas), modo "ver juntos", sincronización en vivo del catálogo vía APIs oficiales de las plataformas (v1 usa un catálogo semilla/manual), reseñas de usuarios, recomendaciones basadas en el historial real de visionado (sin OAuth a las cuentas de streaming), múltiples perfiles por cuenta.
-
-Detalle completo en [docs/product.md](./docs/product.md).
+La documentación de producto y proceso vive en Notion ([Inicio](https://app.notion.com/p/ebcbd3bd193b8321a42481a84fa5158f) · [Documentación](https://app.notion.com/p/3c6bd3bd193b80c9a6dffd70018b9941)). Este repo es la fuente de verdad de specs y código.
 
 ## Stack
 
-- **App:** [Expo](https://expo.dev/) (React Native)
-- **Backend / datos:** [Supabase](https://supabase.com/) (Postgres, Auth, Storage, Edge Functions)
+Expo + React Native (TypeScript estricto, Expo Router, Unistyles, glass iOS 26) · Supabase (Postgres + RLS + Edge Functions) · TMDB · RevenueCat. Detalle en [Stack tecnológico](https://app.notion.com/p/3c6bd3bd193b807781c7c67526d4ddd7).
 
-## Instalación
+## Instalación y comandos
 
 ```bash
-# Requisitos: Node LTS, pnpm/npm, Expo CLI, Supabase CLI, cuenta de Supabase
 npm install
-cp .env.example .env   # completar con las claves del proyecto de Supabase
+cp .env.example .env     # rellenar valores locales
+npx supabase start       # Supabase local (Docker)
+npx supabase db reset    # migraciones + seed
+npx expo start           # app
+npm run lint && npm run typecheck && npm run test
 ```
 
-## Comandos
+> La app aún no está scaffoldeada: estos comandos funcionan a partir de la siguiente sesión.
 
-```bash
-npm run start       # levanta Expo (dev server)
-npm run ios         # abre en simulador iOS
-npm run android     # abre en emulador Android
-npm run lint        # linting
-npm run test        # tests
-supabase start      # entorno local de Supabase
-supabase db push    # aplica migraciones
-```
+## Trabajar con agentes
 
-> Estos comandos son el objetivo del scaffold; ajustar según el `package.json` real una vez arrancado el proyecto Expo.
-
-## Arquitectura mínima
-
-App Expo (cliente) → Supabase (Postgres + Auth + Storage + Edge Functions). Detalle en [docs/architecture.md](./docs/architecture.md).
-
-## Documentación del proyecto
-
-Punto de entrada para humanos y agentes: [docs/index.md](./docs/index.md).
-
-## Decisiones abiertas
-
-- Cerrar el esquema de datos inicial en Supabase ([docs/database.md](./docs/database.md)) — hay un borrador de tablas, falta implementarlo.
-- Definir estrategia de navegación y gestión de estado en Expo.
-- Definir de dónde sale el catálogo semilla de títulos (manual al inicio; evaluar una fuente real más adelante).
+- [`AGENTS.md`](./AGENTS.md): qué es el proyecto, reglas, dominio, flujo, qué no tocar y a quién preguntar. `CLAUDE.md` lo importa.
+- `app/AGENTS.md` y `supabase/AGENTS.md`: reglas de cada carpeta.
+- `.claude/settings.json` (permisos y hooks), `.agents/skills/` (skills del proyecto) y `.mcp.json` (Notion + Supabase local).
 
 ## Estado del proyecto
 
-🚧 Estructura base / scaffold inicial (README, `AGENTS.md`, `.agents/`, `.claude/`, `docs/`, `.github/`). Visión de producto definida en [docs/product.md](./docs/product.md); sin código de aplicación todavía.
+🚧 Repo preparado para trabajar con agentes (rama `chore/agents-setup`); sin código de aplicación todavía.

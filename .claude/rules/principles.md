@@ -1,1 +1,0 @@
-@../../.agents/guidelines/principles.md
