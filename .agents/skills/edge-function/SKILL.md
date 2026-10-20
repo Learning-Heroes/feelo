@@ -5,7 +5,7 @@ description: Create or change a Feelo Supabase Edge Function with Hono + @hono/z
 
 # Edge Function — Feelo
 
-Rules: [`supabase/AGENTS.md`](../../../supabase/AGENTS.md). Decide first whether it belongs here: pure data logic → Postgres function (RPC) via `new-migration`; secrets, external APIs or the scoring pipeline → Edge Function.
+Rules (what goes in a function, JWT, errors, idempotency): [`supabase/AGENTS.md`](../../../supabase/AGENTS.md). This skill is the how.
 
 ## 1. Create
 
@@ -85,28 +85,21 @@ app.doc('/get-suggestions/openapi.json', { openapi: '3.1.0', info: { title: 'get
 Deno.serve(app.fetch)
 ```
 
-## 3. Rules
+Handler result shape: `{ ok: true, data } | { ok: false, status, error }`. Secrets: `Deno.env.get('TMDB_API_KEY')`, failing at startup if missing.
 
-- **Zod first**: nothing touches the DB or a third party before the input is validated.
-- Create the Supabase client with the **caller's JWT** so RLS applies. Use `service_role` only when the task requires it (ingestion, webhooks) and say why in the PR.
-- Secrets via `Deno.env.get('TMDB_API_KEY')`; fail at startup if missing, no fallbacks, never log them.
-- Return typed results from the handler (`{ ok: true, data } | { ok: false, status, error }`) instead of throwing by default. Stable `code` per error; no stack traces or SQL in responses.
-- Idempotent for anything a phone may retry (idempotency key or upsert on a natural key).
-- The scoring is in-house and deterministic: no LLM or external inference.
-
-## 4. Run and test
+## 3. Run and test
 
 ```bash
 npx supabase functions serve <kebab-name>
 deno test supabase/functions/<kebab-name>/
 ```
 
-Tests cover happy path, edge cases and every expected error with its exact `code` (from the task's test cases). Test the handler directly; one HTTP-level test per route is enough.
+Test the handler directly with the task's test cases; one HTTP-level test per route is enough.
 
-## 5. Contract
+## 4. Contract
 
 ```bash
 npm run api:sync
 ```
 
-Commit the regenerated `api/` and `postman/` in the same PR. Never edit them by hand.
+Commit the regenerated `api/` and `postman/` in the same PR.

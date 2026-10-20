@@ -5,7 +5,7 @@ description: Build Feelo UI on a glass / Liquid Glass surface through the in-hou
 
 # Glass component — Feelo
 
-Rules: [`app/AGENTS.md`](../../../app/AGENTS.md). Visual language: [Brand book](https://app.notion.com/p/3c6bd3bd193b8070be4bc17609c8fd55) · [Prototipo](https://app.notion.com/p/3c6bd3bd193b80f09061f4b8536e3cdf).
+Visual language: [Brand book](https://app.notion.com/p/3c6bd3bd193b8070be4bc17609c8fd55) · [Prototipo](https://app.notion.com/p/3c6bd3bd193b80f09061f4b8536e3cdf).
 
 Real Liquid Glass is an iOS 26 system API; Android doesn't have it. So every surface has **three levels** and `<GlassSurface>` picks one at runtime:
 
@@ -34,7 +34,6 @@ const styles = StyleSheet.create((theme) => ({
 }))
 ```
 
-- Never import `expo-glass-effect`, `@callstack/liquid-glass` or `expo-blur` outside `src/components/GlassSurface.tsx`.
 - Pick a `variant` (`card`, `sheet`, `bar`, `button`…); don't pass raw tint or intensity values from a screen.
 - Keep simultaneously visible blurred surfaces low on Android (≈3); prefer one `GlassSurface` wrapping a group over many small ones.
 
@@ -105,4 +104,4 @@ const styles = StyleSheet.create({ base: { overflow: 'hidden' } })
 ## Verify
 
 - Component test (RNTL): each of the three branches renders, mocking `isLiquidGlassAvailable`, `Platform.OS` and `isReduceTransparencyEnabled`.
-- Look at it on an iOS 26 dev build (`npx expo run:ios`), an Android emulator and with *Reduce Transparency* on. Note in the PR what you checked. No fallback → the PR doesn't pass.
+- Look at it on an iOS 26 dev build (`npx expo run:ios`), an Android emulator and with *Reduce Transparency* on. Note in the PR what you checked.

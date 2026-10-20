@@ -14,8 +14,6 @@ npx supabase start                       # if not running
 npx supabase migration new <verb_object>  # e.g. add_user_mood, add_index_content_duration
 ```
 
-One responsibility per migration. Never edit a migration that has already been applied; write a new one.
-
 ## 2. Write the SQL
 
 Table names are snake_case singular as in the domain model (`user_mood`, `content_platform`).
@@ -49,9 +47,7 @@ create policy "user_mood_insert_own" on public.user_mood
 -- No update/delete policy = denied. Write one only if the task requires it.
 ```
 
-- **User tables**: scope every policy to `(select auth.uid()) = user_id`.
-- **Catalog tables** (`content`, `genre`, `content_genre`, `platform`, `content_platform`, `clip`): `select` policy `to anon, authenticated using (true)`; no write policies (ingestion uses `service_role`).
-- Constraints in the DB (`not null`, `check`, FKs, `unique`), not only in the app.
+- Catalog table → a single `select` policy `to anon, authenticated using (true)`, no write policies.
 - Destructive change (drop/rename/type change on data in use) → write the recovery plan in the PR and flag it to Rafa.
 
 ## 3. Seed
@@ -78,7 +74,7 @@ A 200 is not proof: assert on the rows returned.
 npx supabase gen types typescript --local > src/lib/database.types.ts
 ```
 
-Never edit that file by hand (a hook blocks it). Fix type errors the regen surfaces in the app.
+Fix type errors the regen surfaces in the app.
 
 ## 6. Regenerate the contract
 
@@ -86,7 +82,7 @@ Never edit that file by hand (a hook blocks it). Fix type errors the regen surfa
 npm run api:sync
 ```
 
-Commit the regenerated `api/` and `postman/` in the same PR — CI fails on drift.
+Commit the regenerated `api/` and `postman/` in the same PR.
 
 ## Checklist
 
