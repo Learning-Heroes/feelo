@@ -72,23 +72,78 @@ Staging es compartido: nunca `db reset --linked` (borra los datos de todos), nun
 
 ### Opción B — Local (Docker)
 
-Con Docker Desktop abierto:
+Una base de datos solo tuya, en tu máquina. No necesitas cuenta de Supabase.
+
+**Requisitos:** Docker Desktop instalado y abierto, y `npm install` hecho (la CLI va por `npx`).
+
+**1. Arranca Supabase**
 
 ```bash
-npx supabase start            # la primera vez descarga las imágenes (varios GB)
-npx supabase status           # muestra la API URL y la anon key locales
+npx supabase start
 ```
 
-Pon en tu `.env` los valores de `supabase status`:
+La primera vez descarga las imágenes (varios GB, unos minutos): conviene hacerlo antes de la sesión. Al acabar imprime las URLs y las claves.
+
+**2. Saca la URL y la clave**
 
 ```bash
-EXPO_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
-EXPO_PUBLIC_SUPABASE_ANON_KEY=<anon key de supabase status>
+npx supabase status
 ```
 
-`127.0.0.1` sirve en el simulador de iOS. En el emulador de Android usa `http://10.0.2.2:54321`, y en un móvil físico, la IP de tu ordenador en la red local.
+De todo lo que muestra solo necesitas dos valores:
 
-Día a día:
+| Valor de `status` | Para qué | ¿Va en `.env`? |
+|---|---|---|
+| `API URL` (`http://127.0.0.1:54321`) | Dirección de la API | ✅ `EXPO_PUBLIC_SUPABASE_URL` |
+| `anon key` (empieza por `eyJ…`) | Clave pública de la app; la protección es la RLS | ✅ `EXPO_PUBLIC_SUPABASE_ANON_KEY` |
+| `service_role key` / `Secret key` | Se salta la RLS | ❌ Nunca en la app |
+| `DB URL`, `Studio URL`… | Conectar con psql o abrir el panel | ❌ |
+
+La *publishable key* (`sb_publishable_…`) es la sustituta nueva de la anon key; cualquiera de las dos funciona.
+
+**3. Crea el `.env`**
+
+Este comando lo genera a partir de `supabase status` (**sobrescribe** el `.env` que tengas):
+
+```bash
+npx supabase status -o env | grep -E '^(API_URL|ANON_KEY)=' \
+  | sed -e 's/^API_URL=/EXPO_PUBLIC_SUPABASE_URL=/' -e 's/^ANON_KEY=/EXPO_PUBLIC_SUPABASE_ANON_KEY=/' > .env
+```
+
+O cópialo a mano desde `.env.example`. Tiene que quedar así:
+
+```bash
+EXPO_PUBLIC_SUPABASE_URL="http://127.0.0.1:54321"
+EXPO_PUBLIC_SUPABASE_ANON_KEY="eyJhbGciOi..."
+```
+
+La anon key local es una clave de demo, igual para todo el mundo y válida solo contra tu Docker. Aun así, `.env` nunca se sube al repo.
+
+**4. Ajusta la URL a tu dispositivo**
+
+| Dónde corre la app | `EXPO_PUBLIC_SUPABASE_URL` |
+|---|---|
+| Simulador de iOS | `http://127.0.0.1:54321` |
+| Emulador de Android | `http://10.0.2.2:54321` |
+| Móvil físico (misma wifi) | `http://<IP de tu Mac>:54321` (`ipconfig getifaddr en0`) |
+
+**5. Comprueba que responde y arranca la app**
+
+```bash
+curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:54321/auth/v1/health -H "apikey: <anon key>"   # 200
+npx expo start -c
+```
+
+El `-c` limpia la caché: Expo mete las variables `EXPO_PUBLIC_*` en el código al compilar, y sin él la app sigue con los valores anteriores.
+
+**Si algo falla**
+
+- `Cannot connect to the Docker daemon` → abre Docker Desktop y repite.
+- `port is already allocated` → hay otro Supabase corriendo (de este u otro proyecto): `npx supabase stop --all`.
+- La app dice `Missing EXPO_PUBLIC_SUPABASE_URL…` → falta el `.env` o no reiniciaste con `npx expo start -c`.
+- `no files matched pattern: supabase/seed.sql` → es solo un aviso hasta que exista la primera migración con seed.
+
+**Día a día**
 
 ```bash
 npx supabase migration new <verbo_objeto>
