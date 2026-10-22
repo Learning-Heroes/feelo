@@ -90,9 +90,10 @@ Handler result shape: `{ ok: true, data } | { ok: false, status, error }`. Secre
 ## 3. Run and test
 
 ```bash
-npx supabase functions serve <kebab-name>
 deno test supabase/functions/<kebab-name>/
 ```
+
+There is no local Supabase (`functions serve` needs Docker), so test the handler with `deno test`. Deploying to staging (`functions deploy`) is done by a human or CI, not by an agent.
 
 Test the handler directly with the task's test cases; one HTTP-level test per route is enough.
 

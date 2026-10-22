@@ -13,7 +13,9 @@ Rules for any AI agent (Claude Code, Codex, Cursor, Copilot…) working in this 
 
 Genre is never asked: it emerges from the algorithm as a latent variable. The recommender is **in-house and deterministic** — no LLM APIs or external inference.
 
-Status: **early build**. Expo app scaffolded (SDK 58, Expo Router, Unistyles 3 — needs a dev build: `npm run ios`, not Expo Go). `api:sync` and Supabase arrive with the first backend task.
+Status: **early build**. Expo app scaffolded (SDK 58, Expo Router, Unistyles 3 — needs a dev build: `npm run ios`, not Expo Go). Supabase initialised (`supabase/config.toml`, client in `src/lib/supabase.ts`), no schema yet. `api:sync` arrives with the first backend task.
+
+**Supabase is cloud-only: no local Supabase, no Docker.** Development runs against the **staging** project (Free plan: 2 projects, staging + production). Each person links their checkout once; agents never link. Setup: `README.md` → Supabase.
 
 ## Stack
 
@@ -37,14 +39,15 @@ scripts/      # build-api-spec, generators, CI checks
 
 ```bash
 npm install
-npx supabase start            # local Supabase (Docker). Studio: http://localhost:54323
-npx supabase db reset         # local DB: re-apply migrations + seed.sql
+npx supabase migration new <verb_object>   # new migration file
+npx supabase db push          # apply pending migrations to the linked project (staging)
+npx supabase migration list   # local files vs. what staging has applied
 npx expo start                # dev server (native glass needs a dev build: npx expo run:ios)
 npm run lint                  # ESLint
 npm run typecheck             # tsc --noEmit
 npm run test                  # Jest
 npm run api:sync              # regenerate api/ + postman/ from schema + Zod
-npx supabase gen types typescript --local > src/lib/database.types.ts
+npx supabase gen types typescript --linked > src/lib/database.types.ts
 ```
 
 Lint, types and tests green before opening a PR.
@@ -86,7 +89,7 @@ Seeders are part of the deliverable: if QA can't reproduce it on staging with se
 
 - `api/`, `postman/`, `src/lib/database.types.ts` — generated. Change the source and regenerate (`api:sync`, `gen types`) in the same PR.
 - `.env` and any secret. Only `.env.example` (empty values) is versioned.
-- Anything outside local: staging/production Supabase (`db push`, `link`, `functions deploy`, `secrets`, `--linked`), EAS submit/update, store consoles. CI promotes; humans confirm.
+- Supabase beyond `db push` to the already-linked staging project: never `link`, `db reset` (it would wipe the shared staging DB), `functions deploy`, `secrets` or anything aimed at production. Never change the schema from the dashboard or through the MCP. Same for EAS submit/update and store consoles. CI promotes; humans confirm.
 - `main` and `staging` directly: always branch + PR. No force-push.
 
 Part of this list is enforced by `.claude/settings.json` and `.claude/hooks/`; the rest is on you.

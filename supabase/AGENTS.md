@@ -4,11 +4,20 @@ Only what's specific to the backend; the root `AGENTS.md` still applies. Owner: 
 
 ```
 supabase/
+  config.toml   # CLI + Auth/Storage config (versioned; not applied by db push)
   migrations/   # versioned SQL — the only way to change the schema
   functions/    # Edge Functions (Deno, Hono + @hono/zod-openapi)
-  tests/        # pgTAP (npx supabase test db)
+  tests/        # pgTAP (npx supabase test db --linked)
   seed.sql      # reproducible data, incl. one seed user per role
 ```
+
+## Environments
+
+Cloud only — there is no local Supabase and no Docker. Development and QA share the **staging** project; production is a separate project that only CI touches.
+
+- The checkout is linked to staging once by a human (`README.md` → Supabase). Every CLI command acts on that link.
+- Staging is shared: push only migrations you are ready for others to run against, and never edit one already pushed — add a new one.
+- No `db reset` against staging: it wipes everyone's data. To redo seed data, write it idempotently (`on conflict do nothing`) and `db push --include-seed`.
 
 ## Schema and RLS
 

@@ -21,21 +21,52 @@ Expo + React Native (TypeScript estricto, Expo Router, Unistyles, glass iOS 26) 
 
 ```bash
 npm install
-cp .env.example .env     # rellenar valores locales
-npx supabase start       # Supabase local (Docker)
-npx supabase db reset    # migraciones + seed
-npx expo start           # app
+cp .env.example .env     # rellenar con los datos de Supabase (ver abajo)
+npm run ios              # dev build (Unistyles no funciona en Expo Go)
 npm run lint && npm run typecheck && npm run test
 ```
 
-> La app aún no está scaffoldeada: estos comandos funcionan a partir de la siguiente sesión.
+## Supabase
+
+Usamos **Supabase en la nube, sin Supabase local ni Docker**. El desarrollo apunta al proyecto de **staging**; producción es otro proyecto que solo toca CI.
+
+Se hace una vez por persona:
+
+1. Pide a Rafa acceso a la organización de Supabase (cuenta nominal, nada de credenciales compartidas).
+2. En el dashboard del proyecto de staging, **Project Settings → API**, copia la *Project URL* y la *anon public key* en tu `.env`:
+   ```bash
+   EXPO_PUBLIC_SUPABASE_URL=https://<project-ref>.supabase.co
+   EXPO_PUBLIC_SUPABASE_ANON_KEY=<anon key>
+   ```
+   Solo la `anon` key llega a la app; la `service_role` nunca va en `.env` ni en el repo.
+3. Enlaza la CLI con staging (te pedirá la contraseña de la base de datos):
+   ```bash
+   npx supabase login
+   npx supabase link --project-ref <project-ref-de-staging>
+   ```
+4. Para el MCP de Supabase de los agentes, exporta el ref en tu shell (`~/.zshrc`) y, al abrir Claude Code, autentícate con `/mcp`:
+   ```bash
+   export SUPABASE_PROJECT_REF=<project-ref-de-staging>
+   ```
+   El MCP va en modo `read_only`: los agentes consultan esquema, datos y logs, pero el esquema solo cambia por migraciones.
+
+Día a día:
+
+```bash
+npx supabase migration new <verbo_objeto>    # nueva migración en supabase/migrations/
+npx supabase db push --include-seed          # aplica migraciones pendientes + seed a staging
+npx supabase migration list                  # qué migraciones tiene ya staging
+npx supabase gen types typescript --linked > src/lib/database.types.ts
+```
+
+Staging es compartido: nunca `db reset` (borra los datos de todos), nunca cambios de esquema desde el dashboard y nunca editar una migración ya aplicada.
 
 ## Trabajar con agentes
 
 - [`AGENTS.md`](./AGENTS.md): qué es el proyecto, reglas, dominio, flujo, qué no tocar y a quién preguntar. `CLAUDE.md` lo importa.
 - `app/AGENTS.md` y `supabase/AGENTS.md`: reglas de cada carpeta.
-- `.claude/settings.json` (permisos y hooks), `.agents/skills/` (skills del proyecto) y `.mcp.json` (Notion + Supabase local).
+- `.claude/settings.json` (permisos y hooks), `.agents/skills/` (skills del proyecto) y `.mcp.json` (Notion + Supabase cloud en solo lectura).
 
 ## Estado del proyecto
 
-🚧 Repo preparado para trabajar con agentes (rama `chore/agents-setup`); sin código de aplicación todavía.
+🚧 App Expo con la pantalla Descubre estática y Supabase inicializado (`supabase/config.toml`, cliente en `src/lib/supabase.ts`), todavía sin esquema.

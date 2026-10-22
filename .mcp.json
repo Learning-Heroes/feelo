@@ -4,9 +4,9 @@
       "type": "http",
       "url": "https://mcp.notion.com/mcp"
     },
-    "supabase-local": {
+    "supabase": {
       "type": "http",
-      "url": "http://localhost:54321/mcp"
+      "url": "https://mcp.supabase.com/mcp?project_ref=${SUPABASE_PROJECT_REF}&read_only=true"
     }
   }
 }
