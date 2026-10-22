@@ -1,1 +1,0 @@
-@../../.agents/guidelines/supabase.md

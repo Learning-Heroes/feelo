@@ -1,16 +1,22 @@
+## Tarea y spec
+
+- Tarea (Notion): `TODO`
+- Spec: `specs/TODO.md`
+
 ## Qué hace este PR
 
 `TODO`
 
-## Por qué
+## Cómo se ha probado
 
-`TODO`
+`TODO` — comandos, seeds y pasos manuales para reproducirlo.
 
-## Checklist antes de mergear
+## Definition of Done
 
-- [ ] Lint y tests pasan
-- [ ] No hay secretos ni credenciales en el diff (`.env`, claves de Supabase, etc.)
-- [ ] Si se tocó el modelo de datos: hay migración versionada, no cambios manuales en el dashboard
-- [ ] Si se tocó arquitectura, BD o contratos de API: `docs/` actualizado en este mismo PR
-- [ ] Si se tomó una decisión no deducible del código: hay un ADR en `docs/decisions/`
-- [ ] Código en inglés, documentación funcional en español
+- [ ] Cumple la spec y sus criterios de aceptación
+- [ ] Tests escritos primero; lint, tipos y toda la suite en verde
+- [ ] Migraciones y políticas RLS incluidas y probadas con varios usuarios (A, B, anónimo)
+- [ ] Tipos y contrato de API regenerados (`npm run api:sync`) si cambió la superficie de la API
+- [ ] Seeders actualizados para que QA pueda reproducirlo en staging
+- [ ] Sin secretos, sin `any`, sin valores hardcodeados
+- [ ] Decisión relevante registrada en Notion → Decisiones
