@@ -7,17 +7,23 @@ supabase/
   config.toml   # CLI + Auth/Storage config (versioned; not applied by db push)
   migrations/   # versioned SQL — the only way to change the schema
   functions/    # Edge Functions (Deno, Hono + @hono/zod-openapi)
-  tests/        # pgTAP (npx supabase test db --linked)
+  tests/        # pgTAP (npx supabase test db --local | --linked)
   seed.sql      # reproducible data, incl. one seed user per role
 ```
 
 ## Environments
 
-Cloud only — there is no local Supabase and no Docker. Development and QA share the **staging** project; production is a separate project that only CI touches.
+Two dev modes over the same migrations and seed; production is a separate project that only CI touches.
 
-- The checkout is linked to staging once by a human (`README.md` → Supabase). Every CLI command acts on that link.
+| Mode | Where | Apply changes | Flag |
+|---|---|---|---|
+| Cloud (default) | shared **staging** project | `npx supabase db push --include-seed` | `--linked` |
+| Local | Docker via `npx supabase start` (Studio `localhost:54323`) | `npx supabase db reset --local` | `--local` |
+
+- The checkout is linked to staging once by a human (`README.md` → Supabase). Agents never `link`.
+- Local is private and disposable: reset it as often as you like. Prefer it to try a migration before pushing.
 - Staging is shared: push only migrations you are ready for others to run against, and never edit one already pushed — add a new one.
-- No `db reset` against staging: it wipes everyone's data. To redo seed data, write it idempotently (`on conflict do nothing`) and `db push --include-seed`.
+- Never `db reset --linked`: it wipes everyone's data. Write seed idempotently (`on conflict do nothing`) so `db push --include-seed` can rerun it.
 
 ## Schema and RLS
 

@@ -56,12 +56,13 @@ Update `supabase/seed.sql` so the new data can be reproduced: at least rows for 
 ## 4. Apply and test RLS
 
 ```bash
-npx supabase db push --include-seed   # applies pending migrations + seed to the linked STAGING project
+npx supabase db reset --local         # local mode (Docker running): re-apply every migration + seed — try it here first
+npx supabase db push --include-seed   # cloud mode: apply pending migrations + seed to the linked STAGING project
 ```
 
-Staging is shared and has no local copy: read the SQL twice before pushing, and fix a mistake with a new migration, never by editing a pushed one or by `db reset`.
+Staging is shared: read the SQL twice before pushing, and fix a mistake with a new migration, never by editing a pushed one or by `db reset --linked`.
 
-Test isolation with several users (pgTAP in `supabase/tests/` via `npx supabase test db --linked`, or a Jest/Deno integration test with two signed-in clients):
+Test isolation with several users (pgTAP in `supabase/tests/` via `npx supabase test db --local` or `--linked`, or a Jest/Deno integration test with two signed-in clients):
 
 - user A reads/writes their own rows ✅
 - user A cannot read or write user B's rows (empty result / RLS error) ✅
@@ -72,7 +73,7 @@ A 200 is not proof: assert on the rows returned.
 ## 5. Regenerate types
 
 ```bash
-npx supabase gen types typescript --linked > src/lib/database.types.ts
+npx supabase gen types typescript --linked > src/lib/database.types.ts   # or --local
 ```
 
 Fix type errors the regen surfaces in the app.
@@ -90,6 +91,6 @@ Commit the regenerated `api/` and `postman/` in the same PR.
 - [ ] One responsibility, descriptive name, never editing an applied migration
 - [ ] RLS enabled + explicit policy per needed verb
 - [ ] Seed updated (user A, user B, needed catalog rows)
-- [ ] `db push --include-seed` clean on staging, RLS tested with A / B / anonymous
+- [ ] `db reset --local` and/or `db push --include-seed` clean, RLS tested with A / B / anonymous
 - [ ] Types and contract regenerated and committed
 - [ ] Change to the domain model reported to Rafa so Notion → Modelo de dominio gets updated

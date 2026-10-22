@@ -9,7 +9,7 @@ rel="${file#"$CLAUDE_PROJECT_DIR"/}"
 
 case "$rel" in
   api/*|postman/*|src/lib/database.types.ts)
-    echo "Blocked: $rel is generated. Change the source (migration or Edge Function Zod schema) and regenerate with 'npm run api:sync' / 'npx supabase gen types typescript --linked > src/lib/database.types.ts'." >&2
+    echo "Blocked: $rel is generated. Change the source (migration or Edge Function Zod schema) and regenerate with 'npm run api:sync' / 'npx supabase gen types typescript --linked > src/lib/database.types.ts' (or --local)." >&2
     exit 2
     ;;
   .env.example)

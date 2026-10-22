@@ -28,7 +28,16 @@ npm run lint && npm run typecheck && npm run test
 
 ## Supabase
 
-Usamos **Supabase en la nube, sin Supabase local ni Docker**. El desarrollo apunta al proyecto de **staging**; producción es otro proyecto que solo toca CI.
+Hay **dos formas** de trabajar, con las mismas migraciones y el mismo seed. Cada persona elige según a qué apunte su `.env`. Producción es otro proyecto que solo toca CI.
+
+| | Cloud (por defecto) | Local |
+|---|---|---|
+| Base de datos | Proyecto de **staging**, compartido | Docker en tu máquina, solo tuya |
+| Requisitos | Acceso a la org de Supabase | Docker Desktop |
+| Aplicar cambios | `npx supabase db push --include-seed` | `npx supabase db reset --local` |
+| Flag de la CLI | `--linked` | `--local` |
+
+### Opción A — Cloud (staging)
 
 Se hace una vez por persona:
 
@@ -59,13 +68,44 @@ npx supabase migration list                  # qué migraciones tiene ya staging
 npx supabase gen types typescript --linked > src/lib/database.types.ts
 ```
 
-Staging es compartido: nunca `db reset` (borra los datos de todos), nunca cambios de esquema desde el dashboard y nunca editar una migración ya aplicada.
+Staging es compartido: nunca `db reset --linked` (borra los datos de todos), nunca cambios de esquema desde el dashboard y nunca editar una migración ya aplicada.
+
+### Opción B — Local (Docker)
+
+Con Docker Desktop abierto:
+
+```bash
+npx supabase start            # la primera vez descarga las imágenes (varios GB)
+npx supabase status           # muestra la API URL y la anon key locales
+```
+
+Pon en tu `.env` los valores de `supabase status`:
+
+```bash
+EXPO_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+EXPO_PUBLIC_SUPABASE_ANON_KEY=<anon key de supabase status>
+```
+
+`127.0.0.1` sirve en el simulador de iOS. En el emulador de Android usa `http://10.0.2.2:54321`, y en un móvil físico, la IP de tu ordenador en la red local.
+
+Día a día:
+
+```bash
+npx supabase migration new <verbo_objeto>
+npx supabase db reset --local                # reaplica todas las migraciones + seed, desde cero
+npx supabase gen types typescript --local > src/lib/database.types.ts
+npx supabase stop                            # para los contenedores
+```
+
+Studio local: http://localhost:54323. El MCP `supabase-local` de los agentes solo responde con `supabase start` en marcha.
+
+Para pasar de un modo a otro basta con cambiar las dos variables del `.env` y reiniciar Expo (`npx expo start -c`).
 
 ## Trabajar con agentes
 
 - [`AGENTS.md`](./AGENTS.md): qué es el proyecto, reglas, dominio, flujo, qué no tocar y a quién preguntar. `CLAUDE.md` lo importa.
 - `app/AGENTS.md` y `supabase/AGENTS.md`: reglas de cada carpeta.
-- `.claude/settings.json` (permisos y hooks), `.agents/skills/` (skills del proyecto) y `.mcp.json` (Notion + Supabase cloud en solo lectura).
+- `.claude/settings.json` (permisos y hooks), `.agents/skills/` (skills del proyecto) y `.mcp.json` (Notion + Supabase cloud en solo lectura + Supabase local).
 
 ## Estado del proyecto
 
