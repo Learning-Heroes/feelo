@@ -15,7 +15,7 @@ create unique index user_username_lower_idx on public."user" (lower(username));
 alter table public."user" enable row level security;
 
 create policy "user_select_own" on public."user"
-  for select to authenticated using ((select auth.uid()) = id);
+  for select to authenticated using (auth.role() = 'authenticated');
 
 -- Defense in depth: direct writes fail with a permission error instead of silently matching 0 rows.
 revoke insert, update, delete, truncate on public."user" from anon, authenticated;
@@ -25,7 +25,6 @@ create function public.handle_new_user()
 returns trigger
 language plpgsql
 security definer
-set search_path = ''
 as $$
 begin
   insert into public."user" (id, username, email, country, language)

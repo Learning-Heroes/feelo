@@ -5,7 +5,7 @@ import type { Database } from '@/lib/database.types'
 import { LargeSecureStore } from '@/lib/LargeSecureStore'
 import { requireEnv } from '@/lib/requireEnv'
 
-const url = requireEnv('EXPO_PUBLIC_SUPABASE_URL', process.env.EXPO_PUBLIC_SUPABASE_URL)
+const url = requireEnv('EXPO_PUBLIC_SUPABASE_URL', process.env.EXPO_PUBLIC_SUPABASE_URL || 'http://127.0.0.1:54321')
 const anonKey = requireEnv('EXPO_PUBLIC_SUPABASE_ANON_KEY', process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY)
 
 export const supabase = createClient<Database>(url, anonKey, {

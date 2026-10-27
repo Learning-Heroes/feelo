@@ -15,7 +15,10 @@ export const useAuthStore = create<AuthState>()((set) => ({
   isRestoring: true,
   // onAuthStateChange emits INITIAL_SESSION once the stored session is restored, then every change.
   init: () => {
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => set({ session, isRestoring: false }))
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log(session)
+      set({ session, isRestoring: false })
+    })
     return () => data.subscription.unsubscribe()
   },
   signOut: async () => (await supabase.auth.signOut()).error,

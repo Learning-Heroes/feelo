@@ -19,7 +19,7 @@ export function RegisterScreen() {
   return (
     <AuthScreen
       title={messages.register.title}
-      error={error}
+      error={error ? 'No se ha podido crear la cuenta.' : null}
       linkLabel={messages.register.toLogin}
       onLinkPress={() => router.replace('/login')}
     >
