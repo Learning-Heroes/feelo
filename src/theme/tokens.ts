@@ -13,6 +13,8 @@ export const colors = {
   chip: 'rgba(255,255,255,.08)',
   track: 'rgba(255,255,255,.16)',
   scrim: 'rgba(10,10,16,.6)',
+  // Not in the Brand book: provisional red for form and auth errors (Toni, 2026-10-27).
+  error: '#FF6B6B',
 } as const
 
 export const radius = {
@@ -46,4 +48,6 @@ export const layout = {
   progressHeight: 3,
   platformDot: 8,
   clipAspectRatio: 16 / 9,
+  // Minimum touch target (a11y).
+  touchTarget: 44,
 } as const
