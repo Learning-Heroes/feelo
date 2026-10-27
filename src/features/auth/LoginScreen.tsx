@@ -40,7 +40,7 @@ export function LoginScreen() {
         autoComplete="current-password"
         textContentType="password"
       />
-      <AuthSubmitButton label={messages.login.submit} isSubmitting={false} onPress={handleSubmit(submit)} />
+      <AuthSubmitButton label={messages.login.submit} isSubmitting={isSubmitting} onPress={handleSubmit(submit)} />
     </AuthScreen>
   )
 }
