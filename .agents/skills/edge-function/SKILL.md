@@ -10,7 +10,7 @@ Rules (what goes in a function, JWT, errors, idempotency): [`supabase/AGENTS.md`
 ## 1. Create
 
 ```bash
-npx supabase functions new <kebab-name>   # e.g. get-suggestions
+pnpm dlx supabase functions new <kebab-name>   # e.g. get-suggestions
 ```
 
 Layout:
@@ -90,7 +90,7 @@ Handler result shape: `{ ok: true, data } | { ok: false, status, error }`. Secre
 ## 3. Run and test
 
 ```bash
-npx supabase functions serve <kebab-name>   # local mode only (needs npx supabase start)
+pnpm dlx supabase functions serve <kebab-name>   # local mode only (needs pnpm dlx supabase start)
 deno test supabase/functions/<kebab-name>/
 ```
 
@@ -101,7 +101,7 @@ Test the handler directly with the task's test cases; one HTTP-level test per ro
 ## 4. Contract
 
 ```bash
-npm run api:sync
+pnpm api:sync
 ```
 
 Commit the regenerated `api/` and `postman/` in the same PR.

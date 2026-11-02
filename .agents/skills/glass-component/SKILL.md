@@ -98,10 +98,10 @@ const styles = StyleSheet.create({ base: { overflow: 'hidden' } })
 ```
 
 - Tokens (`theme.glass.<variant>`) go in `src/theme/`; add them there, never inline.
-- Check the installed `expo-glass-effect` API (`npx expo install expo-glass-effect expo-blur expo-linear-gradient`) before relying on prop names.
+- Check the installed `expo-glass-effect` API (`pnpm expo install expo-glass-effect expo-blur expo-linear-gradient`) before relying on prop names.
 - `expo-glass-effect` works in Expo Go; `@callstack/liquid-glass` (only if morphing between surfaces is required, and with Toni's approval) needs a dev build.
 
 ## Verify
 
 - Component test (RNTL): each of the three branches renders, mocking `isLiquidGlassAvailable`, `Platform.OS` and `isReduceTransparencyEnabled`.
-- Look at it on an iOS 26 dev build (`npx expo run:ios`), an Android emulator and with *Reduce Transparency* on. Note in the PR what you checked.
+- Look at it on an iOS 26 dev build (`pnpm expo run:ios`), an Android emulator and with *Reduce Transparency* on. Note in the PR what you checked.

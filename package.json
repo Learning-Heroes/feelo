@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "main": "index.ts",
+  "packageManager": "pnpm@10.34.5",
   "scripts": {
     "start": "expo start",
     "ios": "expo run:ios",
@@ -10,7 +11,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "jest",
-    "test:integration": "set -a && eval \"$(npx supabase status -o env 2>/dev/null)\" && jest -c jest.integration.config.js"
+    "test:integration": "set -a && eval \"$(pnpm dlx supabase status -o env 2>/dev/null)\" && jest -c jest.integration.config.js"
   },
   "dependencies": {
     "@expo-google-fonts/sora": "^0.4.2",

@@ -7,7 +7,7 @@ supabase/
   config.toml   # CLI + Auth/Storage config (versioned; not applied by db push)
   migrations/   # versioned SQL — the only way to change the schema
   functions/    # Edge Functions (Deno, Hono + @hono/zod-openapi)
-  tests/        # pgTAP (npx supabase test db --local | --linked)
+  tests/        # pgTAP (pnpm dlx supabase test db --local | --linked)
   seed.sql      # reproducible data, incl. one seed user per role
 ```
 
@@ -17,8 +17,8 @@ Two dev modes over the same migrations and seed; production is a separate projec
 
 | Mode | Where | Apply changes | Flag |
 |---|---|---|---|
-| Cloud (default) | shared **staging** project | `npx supabase db push --include-seed` | `--linked` |
-| Local | Docker via `npx supabase start` (Studio `localhost:54323`) | `npx supabase db reset --local` | `--local` |
+| Cloud (default) | shared **staging** project | `pnpm dlx supabase db push --include-seed` | `--linked` |
+| Local | Docker via `pnpm dlx supabase start` (Studio `localhost:54323`) | `pnpm dlx supabase db reset --local` | `--local` |
 
 - The checkout is linked to staging once by a human (`README.md` → Supabase). Agents never `link`.
 - Local is private and disposable: reset it as often as you like. Prefer it to try a migration before pushing.

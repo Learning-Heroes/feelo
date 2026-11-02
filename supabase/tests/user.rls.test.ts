@@ -1,6 +1,6 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-// `npm run test:integration` loads these from `supabase status -o env`, i.e. the local stack.
+// `pnpm test:integration` loads these from `supabase status -o env`, i.e. the local stack.
 // The URL guard keeps this suite from ever reaching staging.
 function localStack(): { url: string; anonKey: string; serviceRoleKey: string } {
   const url = process.env.API_URL
@@ -9,7 +9,7 @@ function localStack(): { url: string; anonKey: string; serviceRoleKey: string } 
   if (!url || !/^http:\/\/(127\.0\.0\.1|localhost):54321$/.test(url)) {
     throw new Error(`Integration tests only run against the local stack, got ${url}`)
   }
-  if (!anonKey || !serviceRoleKey) throw new Error('Missing ANON_KEY or SERVICE_ROLE_KEY: run via npm run test:integration')
+  if (!anonKey || !serviceRoleKey) throw new Error('Missing ANON_KEY or SERVICE_ROLE_KEY: run via pnpm test:integration')
   return { url, anonKey, serviceRoleKey }
 }
 

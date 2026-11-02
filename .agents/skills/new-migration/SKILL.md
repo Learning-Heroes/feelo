@@ -10,7 +10,7 @@ A schema change is only done when all six steps are in the same PR. Rules behind
 ## 1. Create the file
 
 ```bash
-npx supabase migration new <verb_object>  # e.g. add_user_mood, add_index_content_duration
+pnpm dlx supabase migration new <verb_object>  # e.g. add_user_mood, add_index_content_duration
 ```
 
 ## 2. Write the SQL
@@ -56,13 +56,13 @@ Update `supabase/seed.sql` so the new data can be reproduced: at least rows for 
 ## 4. Apply and test RLS
 
 ```bash
-npx supabase db reset --local         # local mode (Docker running): re-apply every migration + seed — try it here first
-npx supabase db push --include-seed   # cloud mode: apply pending migrations + seed to the linked STAGING project
+pnpm dlx supabase db reset --local         # local mode (Docker running): re-apply every migration + seed — try it here first
+pnpm dlx supabase db push --include-seed   # cloud mode: apply pending migrations + seed to the linked STAGING project
 ```
 
 Staging is shared: read the SQL twice before pushing, and fix a mistake with a new migration, never by editing a pushed one or by `db reset --linked`.
 
-Test isolation with several users (pgTAP in `supabase/tests/` via `npx supabase test db --local` or `--linked`, or a Jest/Deno integration test with two signed-in clients):
+Test isolation with several users (pgTAP in `supabase/tests/` via `pnpm dlx supabase test db --local` or `--linked`, or a Jest/Deno integration test with two signed-in clients):
 
 - user A reads/writes their own rows ✅
 - user A cannot read or write user B's rows (empty result / RLS error) ✅
@@ -73,7 +73,7 @@ A 200 is not proof: assert on the rows returned.
 ## 5. Regenerate types
 
 ```bash
-npx supabase gen types typescript --linked > src/lib/database.types.ts   # or --local
+pnpm dlx supabase gen types typescript --linked > src/lib/database.types.ts   # or --local
 ```
 
 Fix type errors the regen surfaces in the app.
@@ -81,7 +81,7 @@ Fix type errors the regen surfaces in the app.
 ## 6. Regenerate the contract
 
 ```bash
-npm run api:sync
+pnpm api:sync
 ```
 
 Commit the regenerated `api/` and `postman/` in the same PR.

@@ -13,12 +13,12 @@ Rules for any AI agent (Claude Code, Codex, Cursor, Copilot…) working in this 
 
 Genre is never asked: it emerges from the algorithm as a latent variable. The recommender is **in-house and deterministic** — no LLM APIs or external inference.
 
-Status: **early build**. Expo app scaffolded (SDK 58, Expo Router, Unistyles 3 — needs a dev build: `npm run ios`, not Expo Go). Supabase initialised (`supabase/config.toml`, client in `src/lib/supabase.ts`), no schema yet. `api:sync` arrives with the first backend task.
+Status: **early build**. Expo app scaffolded (SDK 58, Expo Router, Unistyles 3 — needs a dev build: `pnpm ios`, not Expo Go). Supabase initialised (`supabase/config.toml`, client in `src/lib/supabase.ts`), no schema yet. `api:sync` arrives with the first backend task.
 
 **Supabase has two dev modes**, chosen per person by what `.env` points at (setup: `README.md` → Supabase):
 
 - **Cloud (default)** — the shared **staging** project (Free plan: 2 projects, staging + production). Each person links their checkout once; agents never link. CLI flag: `--linked`.
-- **Local** — Supabase in Docker (`npx supabase start`), private and disposable. CLI flag: `--local`.
+- **Local** — Supabase in Docker (`pnpm dlx supabase start`), private and disposable. CLI flag: `--local`.
 
 Same migrations and seed for both. Try risky SQL locally first when you can.
 
@@ -43,18 +43,18 @@ scripts/      # build-api-spec, generators, CI checks
 ## Commands
 
 ```bash
-npm install
-npx supabase migration new <verb_object>   # new migration file
-npx supabase db push          # apply pending migrations to the linked project (staging)
-npx supabase migration list   # local files vs. what staging has applied
-npx supabase start            # local mode: Supabase in Docker. Studio: http://localhost:54323
-npx supabase db reset --local # local mode: re-apply migrations + seed (never --linked)
-npx expo start                # dev server (native glass needs a dev build: npx expo run:ios)
-npm run lint                  # ESLint
-npm run typecheck             # tsc --noEmit
-npm run test                  # Jest
-npm run api:sync              # regenerate api/ + postman/ from schema + Zod
-npx supabase gen types typescript --linked > src/lib/database.types.ts   # or --local
+pnpm install                       # pnpm version pinned in package.json "packageManager" (corepack)
+pnpm dlx supabase migration new <verb_object>   # new migration file
+pnpm dlx supabase db push          # apply pending migrations to the linked project (staging)
+pnpm dlx supabase migration list   # local files vs. what staging has applied
+pnpm dlx supabase start            # local mode: Supabase in Docker. Studio: http://localhost:54323
+pnpm dlx supabase db reset --local # local mode: re-apply migrations + seed (never --linked)
+pnpm expo start                    # dev server (native glass needs a dev build: pnpm expo run:ios)
+pnpm lint                          # ESLint
+pnpm typecheck                     # tsc --noEmit
+pnpm test                          # Jest
+pnpm api:sync                      # regenerate api/ + postman/ from schema + Zod
+pnpm dlx supabase gen types typescript --linked > src/lib/database.types.ts   # or --local
 ```
 
 Lint, types and tests green before opening a PR.

@@ -20,10 +20,11 @@ Expo + React Native (TypeScript estricto, Expo Router, Unistyles, glass iOS 26) 
 ## Instalación y comandos
 
 ```bash
-npm install
+corepack enable          # una vez: usa la versión de pnpm fijada en package.json ("packageManager")
+pnpm install
 cp .env.example .env     # rellenar con los datos de Supabase (ver abajo)
-npm run ios              # dev build (Unistyles no funciona en Expo Go)
-npm run lint && npm run typecheck && npm run test
+pnpm ios                 # dev build (Unistyles no funciona en Expo Go)
+pnpm lint && pnpm typecheck && pnpm test
 ```
 
 ## Supabase
@@ -34,7 +35,7 @@ Hay **dos formas** de trabajar, con las mismas migraciones y el mismo seed. Cada
 |---|---|---|
 | Base de datos | Proyecto de **staging**, compartido | Docker en tu máquina, solo tuya |
 | Requisitos | Acceso a la org de Supabase | Docker Desktop |
-| Aplicar cambios | `npx supabase db push --include-seed` | `npx supabase db reset --local` |
+| Aplicar cambios | `pnpm dlx supabase db push --include-seed` | `pnpm dlx supabase db reset --local` |
 | Flag de la CLI | `--linked` | `--local` |
 
 ### Opción A — Cloud (staging)
@@ -50,8 +51,8 @@ Se hace una vez por persona:
    Solo la `anon` key llega a la app; la `service_role` nunca va en `.env` ni en el repo.
 3. Enlaza la CLI con staging (te pedirá la contraseña de la base de datos):
    ```bash
-   npx supabase login
-   npx supabase link --project-ref <project-ref-de-staging>
+   pnpm dlx supabase login
+   pnpm dlx supabase link --project-ref <project-ref-de-staging>
    ```
 4. Para el MCP de Supabase de los agentes, exporta el ref en tu shell (`~/.zshrc`) y, al abrir Claude Code, autentícate con `/mcp`:
    ```bash
@@ -62,10 +63,10 @@ Se hace una vez por persona:
 Día a día:
 
 ```bash
-npx supabase migration new <verbo_objeto>    # nueva migración en supabase/migrations/
-npx supabase db push --include-seed          # aplica migraciones pendientes + seed a staging
-npx supabase migration list                  # qué migraciones tiene ya staging
-npx supabase gen types typescript --linked > src/lib/database.types.ts
+pnpm dlx supabase migration new <verbo_objeto>    # nueva migración en supabase/migrations/
+pnpm dlx supabase db push --include-seed          # aplica migraciones pendientes + seed a staging
+pnpm dlx supabase migration list                  # qué migraciones tiene ya staging
+pnpm dlx supabase gen types typescript --linked > src/lib/database.types.ts
 ```
 
 Staging es compartido: nunca `db reset --linked` (borra los datos de todos), nunca cambios de esquema desde el dashboard y nunca editar una migración ya aplicada.
@@ -74,12 +75,12 @@ Staging es compartido: nunca `db reset --linked` (borra los datos de todos), nun
 
 Una base de datos solo tuya, en tu máquina. No necesitas cuenta de Supabase.
 
-**Requisitos:** Docker Desktop instalado y abierto, y `npm install` hecho (la CLI va por `npx`).
+**Requisitos:** Docker Desktop instalado y abierto, y `pnpm install` hecho (la CLI de Supabase se ejecuta con `pnpm dlx`, no hace falta instalarla).
 
 **1. Arranca Supabase**
 
 ```bash
-npx supabase start
+pnpm dlx supabase start
 ```
 
 La primera vez descarga las imágenes (varios GB, unos minutos): conviene hacerlo antes de la sesión. Al acabar imprime las URLs y las claves.
@@ -87,7 +88,7 @@ La primera vez descarga las imágenes (varios GB, unos minutos): conviene hacerl
 **2. Saca la URL y la clave**
 
 ```bash
-npx supabase status
+pnpm dlx supabase status
 ```
 
 De todo lo que muestra solo necesitas dos valores:
@@ -106,7 +107,7 @@ La *publishable key* (`sb_publishable_…`) es la sustituta nueva de la anon key
 Este comando lo genera a partir de `supabase status` (**sobrescribe** el `.env` que tengas):
 
 ```bash
-npx supabase status -o env | grep -E '^(API_URL|ANON_KEY)=' \
+pnpm dlx supabase status -o env | grep -E '^(API_URL|ANON_KEY)=' \
   | sed -e 's/^API_URL=/EXPO_PUBLIC_SUPABASE_URL=/' -e 's/^ANON_KEY=/EXPO_PUBLIC_SUPABASE_ANON_KEY=/' > .env
 ```
 
@@ -131,7 +132,7 @@ La anon key local es una clave de demo, igual para todo el mundo y válida solo 
 
 ```bash
 curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:54321/auth/v1/health -H "apikey: <anon key>"   # 200
-npx expo start -c
+pnpm expo start -c
 ```
 
 El `-c` limpia la caché: Expo mete las variables `EXPO_PUBLIC_*` en el código al compilar, y sin él la app sigue con los valores anteriores.
@@ -139,22 +140,22 @@ El `-c` limpia la caché: Expo mete las variables `EXPO_PUBLIC_*` en el código 
 **Si algo falla**
 
 - `Cannot connect to the Docker daemon` → abre Docker Desktop y repite.
-- `port is already allocated` → hay otro Supabase corriendo (de este u otro proyecto): `npx supabase stop --all`.
-- La app dice `Missing EXPO_PUBLIC_SUPABASE_URL…` → falta el `.env` o no reiniciaste con `npx expo start -c`.
+- `port is already allocated` → hay otro Supabase corriendo (de este u otro proyecto): `pnpm dlx supabase stop --all`.
+- La app dice `Missing EXPO_PUBLIC_SUPABASE_URL…` → falta el `.env` o no reiniciaste con `pnpm expo start -c`.
 - `no files matched pattern: supabase/seed.sql` → es solo un aviso hasta que exista la primera migración con seed.
 
 **Día a día**
 
 ```bash
-npx supabase migration new <verbo_objeto>
-npx supabase db reset --local                # reaplica todas las migraciones + seed, desde cero
-npx supabase gen types typescript --local > src/lib/database.types.ts
-npx supabase stop                            # para los contenedores
+pnpm dlx supabase migration new <verbo_objeto>
+pnpm dlx supabase db reset --local                # reaplica todas las migraciones + seed, desde cero
+pnpm dlx supabase gen types typescript --local > src/lib/database.types.ts
+pnpm dlx supabase stop                            # para los contenedores
 ```
 
 Studio local: http://localhost:54323. El MCP `supabase-local` de los agentes solo responde con `supabase start` en marcha.
 
-Para pasar de un modo a otro basta con cambiar las dos variables del `.env` y reiniciar Expo (`npx expo start -c`).
+Para pasar de un modo a otro basta con cambiar las dos variables del `.env` y reiniciar Expo (`pnpm expo start -c`).
 
 ## Trabajar con agentes
 

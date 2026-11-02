@@ -16,7 +16,7 @@
 - [ ] Cumple la spec y sus criterios de aceptación
 - [ ] Tests escritos primero; lint, tipos y toda la suite en verde
 - [ ] Migraciones y políticas RLS incluidas y probadas con varios usuarios (A, B, anónimo)
-- [ ] Tipos y contrato de API regenerados (`npm run api:sync`) si cambió la superficie de la API
+- [ ] Tipos y contrato de API regenerados (`pnpm api:sync`) si cambió la superficie de la API
 - [ ] Seeders actualizados para que QA pueda reproducirlo en staging
 - [ ] Sin secretos, sin `any`, sin valores hardcodeados
 - [ ] Decisión relevante registrada en Notion → Decisiones
