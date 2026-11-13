@@ -15,6 +15,10 @@ export const colors = {
   scrim: 'rgba(10,10,16,.6)',
   // Not in the Brand book: provisional red for form and auth errors (Toni, 2026-10-27).
   error: '#FF6B6B',
+  // Active tab bar item (Brand book §10, prototype feelo-app.html).
+  lavanda: '#B9AFFF',
+  // 1 px inner top highlight on glass surfaces.
+  highlight: 'rgba(255,255,255,.22)',
 } as const
 
 export const radius = {
@@ -41,6 +45,7 @@ export const typography = {
   title: { fontFamily: fonts.extrabold, fontSize: 24, lineHeight: 30, letterSpacing: -0.48 },
   body: { fontFamily: fonts.regular, fontSize: 14, lineHeight: 21 },
   label: { fontFamily: fonts.semibold, fontSize: 12, lineHeight: 16 },
+  tabLabel: { fontFamily: fonts.semibold, fontSize: 10.5 },
 } as const
 
 export const layout = {
@@ -50,4 +55,58 @@ export const layout = {
   clipAspectRatio: 16 / 9,
   // Minimum touch target (a11y).
   touchTarget: 44,
+} as const
+
+// Brand book §9: cubic-bezier control points of motion.spring, and durations in ms.
+export const motion = {
+  spring: [0.3, 1.25, 0.4, 1],
+  duration: {
+    press: 300,
+    indicatorTap: 450,
+    indicatorDrag: 80,
+    itemColor: 300,
+    itemIcon: 350,
+    reduceMotionFade: 200,
+  },
+} as const
+
+// Glass surface variants: tint for the blur fallback, solid for Reduce Transparency.
+export const glass = {
+  borderWidth: 1,
+  bar: {
+    tint: colors.scrim,
+    border: colors.surfaceBorder,
+    solid: colors.noche,
+    // Approximates CSS blur(28px); tune on device.
+    blurIntensity: 60,
+  },
+} as const
+
+// Floating tab bar (prototype feelo-app.html, "tab bar" block).
+export const tabBar = {
+  height: 64,
+  wrapTop: 10,
+  wrapSide: 26,
+  wrapMinBottom: 14,
+  scalePressed: 1.04,
+  scaleDragging: 1.06,
+  // A still press up to this long (ms) still counts as a tap on release.
+  tapMaxDuration: 10000,
+  shadow: { offsetY: 18, blur: 40, color: 'rgba(0,0,0,.55)' },
+  indicator: {
+    inset: 6,
+    offset: 4,
+    shrink: 8,
+    gradient: ['rgba(185,175,255,.22)', 'rgba(139,124,246,.08)'],
+    border: 'rgba(139,124,246,.4)',
+    glow: { offsetY: 4, blur: 18, color: 'rgba(139,124,246,.25)' },
+    highlight: 'rgba(255,255,255,.25)',
+  },
+  item: {
+    gap: 3,
+    iconSize: 24,
+    iconActiveScale: 1.1,
+    iconActiveLift: -1,
+    cutoutOpacity: 0.55,
+  },
 } as const

@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native-unistyles'
 
-import { colors, fonts, layout, radius, spacing, typography } from './tokens'
+import { colors, fonts, glass, layout, motion, radius, spacing, tabBar, typography } from './tokens'
 
-const dark = { colors, fonts, layout, radius, spacing, typography } as const
+const dark = { colors, fonts, glass, layout, motion, radius, spacing, tabBar, typography } as const
 
 type AppThemes = { dark: typeof dark }
 

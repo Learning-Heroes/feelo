@@ -20,9 +20,12 @@
     "@supabase/supabase-js": "^2.118.0",
     "aes-js": "^3.1.2",
     "expo": "~58.0.16",
+    "expo-blur": "~58.0.6",
     "expo-constants": "~58.0.12",
     "expo-dev-client": "~58.0.14",
     "expo-font": "~58.0.9",
+    "expo-glass-effect": "~58.0.5",
+    "expo-linear-gradient": "~58.0.4",
     "expo-linking": "~58.0.13",
     "expo-localization": "~58.0.5",
     "expo-router": "~58.0.24",
@@ -32,12 +35,16 @@
     "react-dom": "19.3.0",
     "react-hook-form": "^7.91.0",
     "react-native": "0.88.0",
+    "react-native-gesture-handler": "~3.3.0",
     "react-native-get-random-values": "^2.0.0",
     "react-native-nitro-modules": "^0.37.1",
+    "react-native-reanimated": "4.7.1",
     "react-native-safe-area-context": "~5.10.1",
     "react-native-screens": "~4.30.0",
+    "react-native-svg": "15.16.0",
     "react-native-unistyles": "^3.5.3",
     "react-native-web": "^0.21.4",
+    "react-native-worklets": "0.13.0",
     "zod": "^4.6.7",
     "zustand": "^5.0.16"
   },
@@ -60,10 +67,11 @@
     "setupFiles": [
       "react-native-unistyles/mocks",
       "./src/theme/unistyles.ts",
-      "./jest.setup.ts"
+      "./jest.setup.tsx"
     ],
     "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/src/$1"
+      "^@/(.*)$": "<rootDir>/src/$1",
+      "^react-native-reanimated/mock$": "<rootDir>/jest/reanimatedMock.tsx"
     },
     "testPathIgnorePatterns": [
       "/node_modules/",

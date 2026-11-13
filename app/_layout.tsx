@@ -2,6 +2,8 @@ import { Sora_400Regular, Sora_600SemiBold, Sora_800ExtraBold, useFonts } from '
 import { SplashScreen, Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { StyleSheet } from 'react-native-unistyles'
 
 import { useAuthStore } from '@/features/auth/useAuthStore'
 
@@ -25,7 +27,7 @@ export default function RootLayout() {
   if (!isReady) return null
 
   return (
-    <>
+    <GestureHandlerRootView style={styles.root}>
       <StatusBar style="light" />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Protected guard={session !== null} redirectTo="/login">
@@ -35,6 +37,10 @@ export default function RootLayout() {
           <Stack.Screen name="(auth)" />
         </Stack.Protected>
       </Stack>
-    </>
+    </GestureHandlerRootView>
   )
 }
+
+const styles = StyleSheet.create((theme) => ({
+  root: { flex: 1, backgroundColor: theme.colors.noche },
+}))
