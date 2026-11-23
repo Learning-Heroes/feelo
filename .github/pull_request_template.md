@@ -1,7 +1,7 @@
 ## Tarea y spec
 
 - Tarea (Notion): `TODO`
-- Spec: `specs/TODO.md`
+- Spec: `openspec/changes/TODO/`
 
 ## Qué hace este PR
 
