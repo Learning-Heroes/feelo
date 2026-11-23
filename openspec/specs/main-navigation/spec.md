@@ -3,9 +3,7 @@
 ## Purpose
 
 The signed-in app's primary navigation is a floating glass tab bar. It has three tabs (Descubre, Sugerir, Perfil) and works with a tap and with hold & drag. Its visuals follow the MVP prototype and Brand book §10.
-
 ## Requirements
-
 ### Requirement: Three tabs in fixed order
 For a signed-in user, the app SHALL show a tab bar with exactly three items in this order: `Descubre`, `Sugerir`, `Perfil`. Each item SHALL have its own filled icon and its text label.
 
@@ -14,11 +12,15 @@ For a signed-in user, the app SHALL show a tab bar with exactly three items in t
 - **THEN** it shows the items `Descubre`, `Sugerir` and `Perfil` in that order, each with an icon and a label
 
 ### Requirement: Discover is the initial tab
-When the signed-in app opens, the `Descubre` tab SHALL be selected and its screen SHALL be the existing Discover screen, unchanged.
+When the signed-in app opens, the `Descubre` tab SHALL be selected and its screen SHALL be the Discover screen. The Discover route SHALL render only the Discover screen, with no other element.
 
 #### Scenario: App start selects Descubre
 - **WHEN** a signed-in user opens the app
 - **THEN** the `Descubre` item is selected and the Discover screen is visible
+
+#### Scenario: Thin Discover route
+- **WHEN** the Discover route renders
+- **THEN** it returns only `<DiscoverScreen />`
 
 ### Requirement: Tap navigates to an inactive tab
 Tapping an inactive tab SHALL show that tab's screen and make that item active. The indicator SHALL slide to the item in 450 ms on the brand spring curve.
@@ -43,11 +45,15 @@ Tapping the active tab SHALL NOT navigate and SHALL NOT remount its screen.
 - **THEN** no navigation happens and the Discover screen is not remounted
 
 ### Requirement: Placeholder tab screens
-The `Sugerir` and `Perfil` screens SHALL show only their title text (`Sugerir` / `Perfil`) on the Noche background. The title SHALL use the Brand book Title role (Sora 800, 24–28 px, tracking −2%) and the screen SHALL contain no other element.
+The `Sugerir` and `Perfil` screens SHALL show their title text (`Sugerir` / `Perfil`) on the Noche background. The title SHALL use the Brand book Title role (Sora 800, 24–28 px, tracking −2%). `Sugerir` SHALL contain no other element. Until the Profile task, `Perfil` SHALL also contain the temporary logout button (`Cerrar sesión`), and nothing else.
 
 #### Scenario: Placeholder screens have only a title
-- **WHEN** the `Sugerir` or `Perfil` screen renders
+- **WHEN** the `Sugerir` screen renders
 - **THEN** it contains exactly one text node, whose text is its title
+
+#### Scenario: Perfil holds the temporary logout button
+- **WHEN** the `Perfil` screen renders
+- **THEN** it shows the `Perfil` title and a `Cerrar sesión` button, and no other element
 
 ### Requirement: Press feedback
 When the user presses the tab bar, it SHALL scale to 1.04 over 300 ms on the brand spring curve.
@@ -146,3 +152,4 @@ The tab bar, glass surface and tab routes SHALL NOT contain literal colours, rad
 #### Scenario: No network while navigating
 - **WHEN** the tabs are rendered and the user navigates through all three with `fetch` mocked
 - **THEN** `fetch` is never called
+
