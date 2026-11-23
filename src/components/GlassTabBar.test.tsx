@@ -329,15 +329,16 @@ describe('GlassTabBar', () => {
       controller.update({ x: 150 })
     })
     expect(barScale()).toBe(1)
+    // The indicator fades in over 200 ms when the previewed slot changes (during the drag).
+    expect(withTiming).toHaveBeenCalledWith(1, expect.objectContaining({ duration: 200 }))
 
     await act(async () => controller.end({ x: 150 }))
     withTiming.mockClear()
     await rerenderAt(1)
 
-    // Position jumps (no spring) and fades in over 200 ms.
+    // Position jumps (no spring).
     expect(indicatorLeft()).toBe(slotLeft(1))
     expect(withTiming).not.toHaveBeenCalledWith(slotLeft(1), expect.anything())
-    expect(withTiming).toHaveBeenCalledWith(1, expect.objectContaining({ duration: 200 }))
     // Active icon keeps scale 1.
     const iconTransform = styleOf('glass-tab-icon-sugerir').transform as Record<string, number>[]
     expect(iconTransform).toContainEqual({ scale: 1 })

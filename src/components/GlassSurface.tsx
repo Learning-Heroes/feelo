@@ -4,8 +4,12 @@ import { useEffect, useState } from 'react'
 import { AccessibilityInfo, Platform, View, type ViewProps } from 'react-native'
 import { StyleSheet, useUnistyles } from 'react-native-unistyles'
 
+import type { glass } from '@/theme/tokens'
+
+type GlassVariant = Exclude<keyof typeof glass, 'borderWidth'>
+
 export interface GlassSurfaceProps extends ViewProps {
-  variant: 'bar'
+  variant: GlassVariant
 }
 
 // The only place that touches glass or blur libraries: native Liquid Glass on iOS 26+,

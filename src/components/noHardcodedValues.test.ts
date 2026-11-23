@@ -7,6 +7,7 @@ const SCANNED = [
   'src/components/GlassSurface.tsx',
   'src/components/useGlassTabBarHeight.ts',
   'src/components/ScreenTitle.tsx',
+  'src/components/Wordmark.tsx',
   'src/components/DiscoverIcon.tsx',
   'src/components/SuggestIcon.tsx',
   'src/components/ProfileIcon.tsx',
