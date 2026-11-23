@@ -36,7 +36,8 @@ src/          # components, features, hooks, lib, theme → app/AGENTS.md
 supabase/     # migrations, functions, seed    → supabase/AGENTS.md
 api/          # GENERATED OpenAPI contract
 postman/      # GENERATED collection + environments
-specs/        # versioned technical spec per task
+openspec/     # specs (openspec/specs/) and one change per task (openspec/changes/)
+specs/        # legacy per-task specs, before OpenSpec
 scripts/      # build-api-spec, generators, CI checks
 ```
 
@@ -85,7 +86,7 @@ Full model: [Modelo de dominio](https://app.notion.com/p/3c6bd3bd193b8041b148e0a
 Process: [Metodología de trabajo](https://app.notion.com/p/3cdbd3bd193b80eb920ec3a2d2de61fa) · task format: [Definición de tarea](https://app.notion.com/p/3c6bd3bd193b80218f87cdfa1dba7165).
 
 1. A task lives in the Notion task board. Without acceptance criteria and test cases it is not ready: don't start it.
-2. Derive a technical spec into `specs/` → **a human reviews it before any code**.
+2. Derive the spec as an OpenSpec change (`/opsx:propose` → `openspec/changes/<name>/`) → **a human reviews it before any code**. Implement with `/opsx:apply`, archive with `/opsx:archive` before the PR.
 3. Write the tests from the task's test cases; confirm they fail. Implement until green.
 4. One branch and one PR per task (`feat/…`, `fix/…`, `docs/…`, `chore/…`), Conventional Commits, PR linking task and spec.
 5. Review: CodeRabbit + area owner sign-off → merge to `staging` → QA by a different agent → CI deploys.

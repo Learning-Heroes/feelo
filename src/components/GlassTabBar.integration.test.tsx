@@ -129,6 +129,22 @@ describe('main tab navigation', () => {
     expect(discoverMounts).toBe(1)
   })
 
+  it('la_ruta_descubre_solo_renderiza_discover', async () => {
+    await openApp()
+
+    expect(screen.getByTestId('discover-header')).toBeOnTheScreen()
+    expect(screen.queryByRole('button', { name: 'Cerrar sesión' })).toBeNull()
+  })
+
+  it('perfil_tiene_el_titulo_y_el_boton_de_cerrar_sesion', async () => {
+    await openApp()
+
+    await tapTab(2)
+
+    expect(screen.getByRole('header', { name: 'Perfil' })).toBeOnTheScreen()
+    expect(screen.getByRole('button', { name: 'Cerrar sesión' })).toBeOnTheScreen()
+  })
+
   it('no_hay_peticiones_de_red', async () => {
     await openApp()
 
